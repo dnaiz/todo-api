@@ -23,7 +23,22 @@ MongoClient.connect('mongodb://localhost:27017/ToDoApp', (err,db)=>{
         //     else
         //         console.log(result.ops)
         // });
-        console.log(db.collection('Users').find());
+        // console.log(db.collection('Users').find());
+        // db.collection('users').insertOne({name:"ahmad",age:37},(err,result)=>{
+        //     if(err){
+        //         console.log('unable to insert a user')
+        //     }else{
+        //         console.log(result.ops)
+        //     }
+        // });
+
+        db.collection('Users').find({name:"ahmad"}).toArray()
+        .then((list)=>{
+            console.log(list);
+        },(err)=>{
+            console.log(err);
+        })
+
     }
 
         db.close();
