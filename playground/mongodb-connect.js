@@ -32,7 +32,7 @@ MongoClient.connect('mongodb://localhost:27017/ToDoApp', (err,db)=>{
         //     }
         // });
 
-        db.collection('Users').find({name:"ahmad"}).toArray()
+        db.collection('users').find({name:"ahmad"}).toArray()
         .then((list)=>{
             console.log(list);
         },(err)=>{
