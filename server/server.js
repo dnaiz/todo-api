@@ -1,67 +1,34 @@
-const mongoose = require('mongoose');
+const express = require('express');
+const bodyParser = require('body-parser');
 
-mongoose.Promise = global.Promise;
+const {mongoose} = require('./db/mongoose');
+const {Todo} = require('./models/todo');
+const {User} = require('./models/user');
 
-mongoose.connect('mongodb://localhost:27017/TodoApp');
+const app = express();
+const port = process.env.PORT || 3000;
 
-// const Todo = mongoose.model('Todo',{
-//     text:{
-//         type:String,
-//         required:true,
-//         minLength:1
+app.use(bodyParser.json());
 
-//     },
-//     completed:{
-//         type:Boolean,
-//         default:false,
-//     },
-//     completedAt:{
-//         type:Number,
-//         default:null
-//     }
-// });
+app.post('/todos',(req, res)=>{
+    const todo = new Todo({
+        text:req.body.text
+    });
+     
+    todo.save().
+    then(
+        (doc)=>{
+            res.send(doc);
 
-// let newTodo = new Todo({
-//     text:'write validations'
-// });
-
-// newTodo.save().then((doc)=>{
-//     console.log('saved todo',doc);
-// },(err)=>{
-//     console.log('unable to save todo',err);
-// });
-
-// const otherTodo = new Todo({
-//     text:'buy winter clothes',
-//     completed:false,
-//     completedAt:0
-// });
-
-// otherTodo.save().then((doc)=>{
-//     console.log('todo saved successfully',doc);
-// },(err)=>{
-//     console.log('unable to save',err)
-// })
-
-const User = mongoose.model('User',{
-    name:{
-        type:String,
-        required:true,
-        minLength:5
-    },
-    age:{
-        type:Number,
-        required:true
-    }
+        },
+        (err)=>{
+            res.status(400).send(err);
+        }
+    );
 });
 
-const newUser = new User({
-    name:'abady',
-    age:34,
+app.listen(port,()=>{
+    console.log(`listening to port ${port}` );
 });
 
-newUser.save().then((doc)=>{
-    console.log('user saved successfully',doc);
-},(err)=>{
-    console.log('unable to save user', err);
-})
+module.exports = {app};
